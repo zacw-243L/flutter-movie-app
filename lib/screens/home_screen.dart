@@ -15,7 +15,10 @@ class _HomeScreenState extends State<HomeScreen> {
   fetchMovies() async {
     String baseURL = '';
 
-    Map<String, String> requestHeaders = {};
+    Map<String, String> requestHeaders = {
+      'X-RapidAPI-Key': '',
+      'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
+    };
 
     Map<String, String> queryParams = {
       //TODO Add query parameters
