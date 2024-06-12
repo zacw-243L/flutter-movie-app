@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Map<String, String> queryParams = {
       //TODO Add query parameters
       'list': 'top_boxoffice_200',
-      "year": "2023"
+      "year": strYear
     };
 
     //DO NOT EDIT
@@ -56,6 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final typedName = await Navigator.pushNamed(context, '/search');
+          if (typedName != null) {
+            setState(() {
+              strYear = typedName.toString();
+            });
+          }
         },
         child: const Icon(Icons.search, size: 30.0, color: Colors.black),
       ),
