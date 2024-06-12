@@ -8,6 +8,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  TextEditingController movieController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

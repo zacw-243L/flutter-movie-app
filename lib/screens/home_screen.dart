@@ -51,9 +51,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Container(),
       //TODO Implement FloatingActionButton to navigate to SearchScreen
-
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final typedName = await Navigator.pushNamed(context, '/search');
+        }, // empty onPressed callback
+        child: const Icon(Icons.search, size: 30.0, color: Colors.black),
+      ),
       appBar: AppBar(
         title: const Text('Movies'),
       ),
