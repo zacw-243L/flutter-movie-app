@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:movie/models/movie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,8 +15,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String strYear = '2023';
 
   // TODO Implement fetchMovies async function that takes in a parameter (year), makes an API request, processes response and returns List<Movie>
-  fetchMovies() async {
-    String baseURL = '';
+  Future<List<Movie>> fetchMovies(String strYear) async {
+    const baseURL = "https://moviesdatabase.p.rapidapi.com/titles";
 
     Map<String, String> requestHeaders = {
       'X-RapidAPI-Key': '',
@@ -23,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Map<String, String> queryParams = {
       //TODO Add query parameters
       'list': 'top_boxoffice_200',
+      "year": "2023"
     };
 
     //DO NOT EDIT
@@ -34,7 +38,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (response.statusCode == 200) {
       // TODO
-    } else {}
+      List<dynamic> jsonList = jsonDecode(response.body) as List<dynamic>;
+      print(jsonList);
+      List<Movie> movies =
+          jsonList.map((json) => Movie.fromJson(json)).toList();
+      return movies;
+    } else {
+      throw Exception('Failed to load');
+    }
   }
 
   @override
