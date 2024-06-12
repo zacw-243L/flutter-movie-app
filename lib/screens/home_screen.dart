@@ -38,7 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (response.statusCode == 200) {
       // TODO
-      List<dynamic> jsonList = jsonDecode(response.body) as List<dynamic>;
+      Map<String, dynamic> jsonData = jsonDecode(response.body);
+      List<dynamic> jsonList = jsonData['results'] as List<dynamic>;
       print(jsonList);
       List<Movie> movies =
           jsonList.map((json) => Movie.fromJson(json)).toList();
@@ -55,14 +56,40 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final typedName = await Navigator.pushNamed(context, '/search');
-        }, // empty onPressed callback
+        },
         child: const Icon(Icons.search, size: 30.0, color: Colors.black),
       ),
       appBar: AppBar(
         title: const Text('Movies'),
       ),
 
-      body: Container(), //TODO Implement FutureBuilder
+      //TODO Implement FutureBuilder
+      body: SafeArea(
+        child: FutureBuilder<List<Movie>>(
+          future: fetchMovies(strYear),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  Movie movie = snapshot.data![index];
+                  return ListTile(
+                    leading: Image.network(movie.url),
+                    title: Text(movie.title),
+                    subtitle: Text(
+                      movie.caption,
+                      textAlign: TextAlign.justify, // Justify the subtitle
+                    ),
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
+        ),
+      ),
     );
   }
 }
