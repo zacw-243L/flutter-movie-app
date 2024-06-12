@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SearchScreen extends StatefulWidget {
   SearchScreen({Key? key}) : super(key: key);
@@ -9,6 +10,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController movieController = TextEditingController();
+  bool _yearErrorShown = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +31,21 @@ class _SearchScreenState extends State<SearchScreen> {
               width: double.infinity, // Make the button as wide as the screen
               child: ElevatedButton(
                 onPressed: () {
+                  final currentYear =
+                      int.parse(DateFormat('yyyy').format(DateTime.now()));
+                  final enteredYear = int.parse(movieController.text);
+
                   if (movieController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Please enter a year'),
+                      ),
+                    );
+                  } else if (enteredYear > currentYear - 1 ||
+                      enteredYear < 2001) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Please enter a valid year (last year)'),
                       ),
                     );
                   } else {
